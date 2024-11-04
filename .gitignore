@@ -23,5 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# NEVER FORGET THE ENV
+# Environments
+.venv/*
 secret.env
+

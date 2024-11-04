@@ -10,6 +10,7 @@ denv_secret = "backend/secret.env"
 # managers
 dbMan, chatMan, gptMan = 0,0,0
 
+
 app = Flask(__name__)
 
 
