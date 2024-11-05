@@ -5,10 +5,10 @@ class DBManager:
     Attributes:
         db_file (string): A string filename to the MongoDB
     """
-    def __init__(self, db_file):
+    def __init__(self, db_file: str) -> None:
         self.db_file = db_file
     
-    def search_for_label(self, searchTerm):
+    def search_for_label(self, searchTerm: str) -> dict[str, str]:
         """
         Searches the database for potential matches based on the user provided searchTerm
         
@@ -20,7 +20,7 @@ class DBManager:
         """
         raise NotImplementedError()
     
-    def get_info_on_label(self, label):
+    def get_info_on_label(self, label: str) -> dict[str, str]:
         """
         Queries the database for all information about the provided label
         

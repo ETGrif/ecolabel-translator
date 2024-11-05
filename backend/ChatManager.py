@@ -5,21 +5,22 @@ class ChatManager:
     Attributes:
         chat_storage (dict<int, list<string>>): A dictionary mapping chat_ids to the associated message history
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.chat_storage = {}
     
-    def create_chat(self):
+    def create_chat(self) -> str:
         """
         Creates a new chat in chatStorage, and returns the token associated with the chat
         
         Args: 
             None
+            
         Returns:
             token (string): A web token assigned to each chat/user. Contains a valid chat_id (int)
         """
         raise NotImplementedError()
     
-    def validate_token(self, token):
+    def validate_token(self, token: str) -> bool:
         """
         Ensures that the provided token is valid
         
@@ -32,7 +33,7 @@ class ChatManager:
         raise NotImplementedError()
         
     
-    def validate_exp_token(self, token):
+    def validate_exp_token(self, token: str) -> bool:
         """
         Validates whether the provided token has expired or not
         
@@ -44,7 +45,7 @@ class ChatManager:
         """
         raise NotImplementedError()
     
-    def get_chat_history(self, token):
+    def get_chat_history(self, token: str) -> list[str]:
         """
         Given a token, returns the associated chat history
         
@@ -56,7 +57,7 @@ class ChatManager:
         """
         raise NotImplementedError()
     
-    def terminate_chat(self, token):
+    def terminate_chat(self, token: str) -> None:
         """
         Terminates the chat associated with the given token by removing it from the chat_storage
         
