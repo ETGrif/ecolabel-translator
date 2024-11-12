@@ -41,7 +41,7 @@ def chat_terminate():
 
 if __name__ == "__main__":
     dbMan = dbm.DBManager(denv.get_key(denv_file, "DB_FILE"))
-    chatMan = cm.ChatManager()
+    chatMan = cm.ChatManager(timeout_in_min=.1)
     gptMan = gptm.GPTManager(denv.get_key(denv_secret, "OPEN_AI_API_KEY"))
     
     app.run(debug=True)

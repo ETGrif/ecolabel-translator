@@ -5,11 +5,10 @@ class GPTManager:
     Attributes:
         api_key (string): A string representing the OpenAI key being used
     """
-    
-    def __init__(self, api_key: str) -> None:
+    def __init__(self, api_key):
         self.api_key = api_key
     
-    def get_response(self, prompt: str) -> str:
+    def get_resp(self, prompt):
         """
         Sends the given prompt to OpenAI and retrieves the response
         
