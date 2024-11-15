@@ -9,14 +9,33 @@ function App() {
     { sender: 'Assistant', text: 'Welcome to the chat!' }
   ]);
   const [isChatActive, setIsChatActive] = useState(false);
+  const [token, setToken] = useState(1);
 
-  const handleLabelSubmit = (event) => {
+  const handleLabelSubmit = async (event) => {
     event.preventDefault();
-    setResults({
-      description: 'This is a sample eco-label description.',
-      epaRecommendation: 'EPA recommends this label for sustainable products.'
-    });
+  
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/search?q=${label}`, {
+        method: 'GET'
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json(); 
+      console.log(data);
+      setResults((prevResults) => ({
+        ...prevResults,
+        description: data.eco_labels,
+        detailedExplanation: data.descriptions,
+        imageUrls: data.image_urls
+      })); 
+    } catch (error) {
+      console.error('Error submitting label:', error);
+    }
   };
+  
 
   const handleGetDetailedExplanation = () => {
     console.log(`Requesting detailed explanation for ${label}`);
@@ -26,11 +45,25 @@ function App() {
     }));
   };
 
-  const handleMessageSubmit = (event) => {
+  const handleMessageSubmit = async (event) => {
     event.preventDefault();
-    if (input.trim()) {
-      setMessages([...messages, { sender: 'User', text: input }]);
+
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/chat/send?t=${input}&m=${token}`, {
+        method: 'GET'
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP error!");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setMessages([...messages, {sender:'User', text:input}, {sender: 'Assistant', text:data.assistant_message}]);
       setInput('');
+    }
+    catch (error) {
+      console.error('Error submitting user input: ', error);
     }
   };
 
@@ -39,6 +72,27 @@ function App() {
     setIsChatActive(false);
     console.log('Chat ended.');
   };
+
+  const handleChatActive = async () => {
+    setIsChatActive(true);
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/chat/init?label=true`, {
+        method: 'GET'
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP error!");
+      }
+
+      const data = await response.json();
+      setMessages([...messages, {sender:'Assistant', text:data.assistant_message}]);
+      setToken((prevToke) => (prevToke = data.chat_token));
+    }
+    catch (error) {
+      console.error('Error starting chat: ', error);
+    }
+  };
+
 
   return (
     <div className="App">
@@ -63,23 +117,28 @@ function App() {
         {results ? (
           <div className="results">
             <h2>Results for "{label}"</h2>
-            <p><strong>Description:</strong> {results.description}</p>
-            <p><strong>EPA Recommendation:</strong> {results.epaRecommendation}</p>
-
-            {results.detailedExplanation ? (
-              <p><strong>Detailed Explanation:</strong> {results.detailedExplanation}</p>
-            ) : (
-              <button onClick={handleGetDetailedExplanation}>
-                Get Detailed Explanation
-              </button>
-            )}
+            <div className='ecolabels'>
+              {results.description && results.description.map((ecolabel, index) => (
+                <p>{ecolabel}</p>
+              ))}
+            </div>
+            <div className='image'>
+              {results.imageUrls && results.imageUrls.map((url, index) => (
+                <img key={index} src={url} alt={`Image ${index + 1}`} className="eco-label-image" />
+              ))}
+            </div>
+            <div className='description'>
+              {results.detailedExplanation && results.detailedExplanation.map((description, index) => (
+                <p>{description}</p>
+              ))}
+            </div>
             <button onClick={() => setResults(null)} className="back-link">Go back</button>
           </div>
         ) : (
           <div>
             {/* Start Chat Button */}
             {!isChatActive && (
-              <button onClick={() => setIsChatActive(true)}>Start Chat</button>
+              <button onClick={handleChatActive}>Start Chat</button>
             )}
 
             {/* Chat Interface */}

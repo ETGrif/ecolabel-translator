@@ -46,12 +46,53 @@ button:hover {
 }
 
 .back-link, .end-chat {
-  color: #344e41;
+  color: #eff9f4;
   text-decoration: none;
   margin-top: 20px;
   display: inline-block;
 }
 
 .back-link:hover, .end-chat:hover {
-  color: #344e41;
+  color: #d6d8d7;
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.eco-label-image {
+  width: 150px;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.image {
+  display: block;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.image img {
+  padding: 10px;
+  box-shadow: none;
+  border: none;
+}
+
+.ecolabels {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
 }
