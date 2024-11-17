@@ -65,7 +65,11 @@ def chat_send():
     default_resp = {
         "assistant_message": "This is a legitamate answer to your question."
     }
+<<<<<<< HEAD
     return jsonify(default_resp)
+=======
+    return default_resp
+>>>>>>> d303e23314cca9230a50e9751e20f11315f099ac
 
 
 @app.route("/chat/terminate", methods=["PUT"])
