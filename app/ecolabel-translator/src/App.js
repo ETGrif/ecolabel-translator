@@ -10,12 +10,13 @@ function App() {
   ]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [token, setToken] = useState(1);
+  const apiURL = 'http://127.0.0.1:5000';
 
   const handleLabelSubmit = async (event) => {
     event.preventDefault();
   
     try {
-      const response = await fetch(`http://127.0.0.1:5000/search?q=${label}`, {
+      const response = await fetch(`${apiURL}/search?q=${label}`, {
         method: 'GET'
       });
   
@@ -49,7 +50,7 @@ function App() {
     event.preventDefault();
 
     try {
-      const response = await fetch(`http://127.0.0.1:5000/chat/send?t=${input}&m=${token}`, {
+      const response = await fetch(`${apiURL}/chat/send?t=${input}&m=${token}`, {
         method: 'GET'
       });
 
@@ -76,7 +77,7 @@ function App() {
   const handleChatActive = async () => {
     setIsChatActive(true);
     try {
-      const response = await fetch(`http://127.0.0.1:5000/chat/init?label=true`, {
+      const response = await fetch(`${apiURL}/chat/init?label=true`, {
         method: 'GET'
       });
 
