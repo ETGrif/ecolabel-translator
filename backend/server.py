@@ -28,21 +28,31 @@ def search():
     # results = dbMan.search_for_label(q)
     
     default_resp = {
-        "eco_labels": ["label_1", "label_2", "label_3"],
-        "image_urls": [
-            "https://dummyimage.com/600x400/ff0000/fff.jpg&text=label_1",
-            "https://dummyimage.com/600x400/00ff00/fff.jpg&text=label_2",
-            "https://dummyimage.com/600x400/0000ff/fff.jpg&text=label_3"
-        ],
-        "descriptions": ["lorem ipsum", "dolor sit amet", "consectetur"]
-    }
-    
+        "eco_label_data": [
+            {
+                "eco_label": "label_1",
+                "image_url": "https://dummyimage.com/600x400/ff0000/fff.jpg&text=label_1",
+                "description": "lorem ipsum"
+            },
+            {
+                "eco_label": "label_2",
+                "image_url": "https://dummyimage.com/600x400/00ff00/fff.jpg&text=label_2",
+                "description": "dolor sit amet"
+            },
+            {
+                "eco_label": "label_3",
+                "image_url": "https://dummyimage.com/600x400/0000ff/fff.jpg&text=label_3",
+                "description": "consectetur"
+            }
+        ]
+    }  
     return default_resp
 
 
 @app.route("/chat/init", methods=["GET"])
 def chat_init():
    label = request.args.get("label", 0)
+   print(label)
    
    if label == 0: abort(422)
    
@@ -65,11 +75,7 @@ def chat_send():
     default_resp = {
         "assistant_message": "This is a legitamate answer to your question."
     }
-<<<<<<< HEAD
-    return jsonify(default_resp)
-=======
     return default_resp
->>>>>>> d303e23314cca9230a50e9751e20f11315f099ac
 
 
 @app.route("/chat/terminate", methods=["PUT"])

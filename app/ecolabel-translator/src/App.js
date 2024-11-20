@@ -5,9 +5,7 @@ function App() {
   const [label, setLabel] = useState('');
   const [results, setResults] = useState(null);
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([
-    { sender: 'Assistant', text: 'Welcome to the chat!' }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [token, setToken] = useState(1);
   const apiURL = 'http://127.0.0.1:5000';
@@ -24,13 +22,12 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   
-      const data = await response.json(); 
+      let data = await response.json();
+      data = data["eco_label_data"];
       console.log(data);
       setResults((prevResults) => ({
         ...prevResults,
-        description: data.eco_labels,
-        detailedExplanation: data.descriptions,
-        imageUrls: data.image_urls
+        ecolabel1: data
       })); 
     } catch (error) {
       console.error('Error submitting label:', error);
@@ -71,13 +68,21 @@ function App() {
   const handleEndChat = () => {
     setMessages([]);
     setIsChatActive(false);
+    setLabel('');
     console.log('Chat ended.');
   };
 
-  const handleChatActive = async () => {
+  const handleGoBack = () => {
+    setResults(null);
+    setLabel('');
+  }
+
+  const handleChatActive = async (event) => {
     setIsChatActive(true);
+    setLabel(event);
+    setResults(null);
     try {
-      const response = await fetch(`${apiURL}/chat/init?label=true`, {
+      const response = await fetch(`${apiURL}/chat/init?label=${event}`, {
         method: 'GET'
       });
 
@@ -99,7 +104,6 @@ function App() {
     <div className="App">
       <div className="container">
         <h1>Eco-Label Translator</h1>
-
         {/* Search form for Eco-Label */}
         {!isChatActive && (
           <form onSubmit={handleLabelSubmit}>
@@ -118,30 +122,19 @@ function App() {
         {results ? (
           <div className="results">
             <h2>Results for "{label}"</h2>
-            <div className='ecolabels'>
-              {results.description && results.description.map((ecolabel, index) => (
-                <p>{ecolabel}</p>
+            <div className='ecolabels'> 
+              {results.ecolabel1 && results.ecolabel1.map((details, index) =>(
+                <div onClick={() => handleChatActive(details.eco_label)}>
+                  <h3>{details.eco_label}</h3>
+                  <img key={index} src={details.image_url} alt="EcoLabel Image" className="eco-label-image"/>
+                  <p>{details.description}</p>
+                </div>
               ))}
             </div>
-            <div className='image'>
-              {results.imageUrls && results.imageUrls.map((url, index) => (
-                <img key={index} src={url} alt={`Image ${index + 1}`} className="eco-label-image" />
-              ))}
-            </div>
-            <div className='description'>
-              {results.detailedExplanation && results.detailedExplanation.map((description, index) => (
-                <p>{description}</p>
-              ))}
-            </div>
-            <button onClick={() => setResults(null)} className="back-link">Go back</button>
+            <button onClick={handleGoBack} className="back-link">Go back</button>
           </div>
         ) : (
           <div>
-            {/* Start Chat Button */}
-            {!isChatActive && (
-              <button onClick={handleChatActive}>Start Chat</button>
-            )}
-
             {/* Chat Interface */}
             {isChatActive && (
               <div>
