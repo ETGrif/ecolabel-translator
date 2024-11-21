@@ -1,4 +1,6 @@
 Flask
 python-dotenv
 pyjwt
+flask_cors
 openai
+

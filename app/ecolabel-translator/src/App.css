@@ -3,41 +3,43 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
-  background-color: #a3b18a;
+  background-color: #a3b18a; /* Light neutral background for a clean look */
 }
 
 .container {
   max-width: 600px;
   margin: 50px auto;
   padding: 20px;
-  border-radius: 8px;
-  background-color: #dad7cd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  align-items: center;
+  border-radius: 10px;
+  background-color: #dad7cd; /* Crisp white for clarity */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1, h2 {
-  color: #588157;
+  color: #2f4f4f; /* Dark slate gray for strong, elegant headings */
 }
+
 input[type="text"], button {
   padding: 10px;
   margin-top: 10px;
   width: 80%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #cfcfcf; /* Subtle border for input and buttons */
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 button {
   width: auto;
-  background-color: #344e41;
+  background-color: #a3b18a; /* Vibrant green for CTA buttons */
   color: white;
+  font-weight: bold;
   cursor: pointer;
   border: none;
-  margin-top: 10px;
+  transition: background-color 0.3s ease-in-out;
 }
 
 button:hover {
-  background-color: #344e41;
+  background-color: #7d886a; /* Slightly darker green for hover */
 }
 
 .results, #messages {
@@ -46,12 +48,63 @@ button:hover {
 }
 
 .back-link, .end-chat {
-  color: #344e41;
+  color: #a3b18a; /* Matches the button for visual consistency */
   text-decoration: none;
   margin-top: 20px;
   display: inline-block;
+  font-weight: bold;
 }
 
 .back-link:hover, .end-chat:hover {
-  color: #344e41;
+  color: #2f4f4f; /* Subtle change to tie into heading color */
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.eco-label-image {
+  width: 150px;
+  height: auto;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.image {
+  display: block;
+  text-align: center;
+}
+
+.image img {
+  padding: 10px;
+}
+
+.ecolabels {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.ecolabels div {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #a3b18a; /* Subtle gray for neutrality */
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+}
+
+.ecolabels div:hover {
+  cursor: pointer;
+  background-color: #588157; /* Slightly darker gray for hover state */
+  transform: translateY(-5px); /* Adds a lifting effect */
+}
+
+.description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

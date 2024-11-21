@@ -1,7 +1,8 @@
-from flask import Flask, abort, render_template, request
+from flask import Flask, abort, render_template, request, jsonify
 import DBManager as dbm
 import ChatManager as cm
 import GPTManager as gptm
+from flask_cors import CORS
 import dotenv as denv
 
 denv_file = "backend/config.env"
@@ -12,6 +13,7 @@ dbMan, chatMan, gptMan = 0,0,0
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.errorhandler(501)
@@ -26,21 +28,31 @@ def search():
     # results = dbMan.search_for_label(q)
     
     default_resp = {
-        "eco_labels": ["label_1", "label_2", "label_3"],
-        "image_urls": [
-            "https://dummyimage.com/600x400/ff0000/fff.jpg&text=label_1",
-            "https://dummyimage.com/600x400/00ff00/fff.jpg&text=label_2",
-            "https://dummyimage.com/600x400/0000ff/fff.jpg&text=label_3"
-        ],
-        "descriptions": ["lorem ipsum", "dolor sit amet", "consectetur"]
-    }
-    
+        "eco_label_data": [
+            {
+                "eco_label": "label_1",
+                "image_url": "https://dummyimage.com/600x400/ff0000/fff.jpg&text=label_1",
+                "description": "lorem ipsum"
+            },
+            {
+                "eco_label": "label_2",
+                "image_url": "https://dummyimage.com/600x400/00ff00/fff.jpg&text=label_2",
+                "description": "dolor sit amet"
+            },
+            {
+                "eco_label": "label_3",
+                "image_url": "https://dummyimage.com/600x400/0000ff/fff.jpg&text=label_3",
+                "description": "consectetur"
+            }
+        ]
+    }  
     return default_resp
 
 
 @app.route("/chat/init", methods=["GET"])
 def chat_init():
    label = request.args.get("label", 0)
+   print(label)
    
    if label == 0: abort(422)
    
