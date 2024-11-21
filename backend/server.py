@@ -52,16 +52,33 @@ def search():
 @app.route("/chat/init", methods=["GET"])
 def chat_init():
    label = request.args.get("label", 0)
-   print(label)
-   
    if label == 0: abort(422)
    
-   default_resp = {
-       "assistant_message": "Hello wold! I'm an assistant.",
-       "chat_token": "header.body.signiature"
+   token = chatMan.create_chat()
+   label_info = {
+       "name": "APT",
+       "description": "More info here later."
    }
    
-   return default_resp
+#    set up the chat
+   [sysMessage,userMessage] = gptMan.init_chat(label_info)
+   chatMan.add_record(token, sysMessage, "system")
+   chatMan.add_record(token, userMessage, "assistant")
+   
+#    get the message
+   chat = chatMan.get_chat(token)
+   message = gptMan.get_resp(chat)
+   
+#    save the message
+   chatMan.add_record(token, message, "assistant")
+   
+#    respond!
+   resp = {
+       "assistant_message": message,
+       "chat_token": token
+   }
+   
+   return resp
 
 
 @app.route("/chat/send", methods=["GET"])
@@ -72,10 +89,20 @@ def chat_send():
     user_message = request.args.get("m", 0)
     if user_message == 0: abort(422)
     
-    default_resp = {
-        "assistant_message": "This is a legitamate answer to your question."
+    # save the message
+    chatMan.add_record(token, user_message, "user")
+    
+    #    get the message
+    chat = chatMan.get_chat(token)
+    message = gptMan.get_resp(chat)
+   
+    # save the message
+    chatMan.add_record(token, message, "assistant")
+    
+    resp = {
+        "assistant_message": message
     }
-    return default_resp
+    return resp
 
 
 @app.route("/chat/terminate", methods=["PUT"])

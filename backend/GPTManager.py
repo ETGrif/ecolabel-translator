@@ -3,12 +3,12 @@ from openai import OpenAI
 
 SYSTEM_PROMPT = """
 You are a helpful assistant which will inform users about ecolabels.
-In this chat, you will discuss the {name} ecolabel from {organization}.
+In this chat, you will discuss the {name} ecolabel.
 Some information to assist the user with is: {description}.
 """
 
 USER_PROMPT = """
-Give me a short but detailed description about the {name} ecolabel from {organization}.
+Give me a short but detailed description about the {name} ecolabel.
 """
 
 
@@ -23,9 +23,9 @@ class GPTManager:
     def __init__(self, api_key):
         self.api_key = api_key
         self.model = "gpt-4o-mini"
-        self.client = OpenAI(api_key)
-
-    def init_chat(info):
+        self.client = OpenAI(api_key=self.api_key)
+        
+    def init_chat(self, info):
         """
         Creates an initial chat based on data from the dict
 
@@ -56,7 +56,7 @@ class GPTManager:
         )
         return response
 
-    def _get_messages_from_chat(chat):
+    def _get_messages_from_chat(self, chat):
         """
         Formats the chat to be in the format used by the openai API
 
