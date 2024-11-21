@@ -72,6 +72,7 @@ class ChatManager:
             raise InvalidTokenException() #return false and also dummy data for the chat_id
         except jwt.InvalidTokenError as e:
             print("Invalid Token")
+            print(token)
             print(e)
             raise InvalidTokenException()
         

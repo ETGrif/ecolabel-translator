@@ -47,7 +47,7 @@ function App() {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${apiURL}/chat/send?t=${input}&m=${token}`, {
+      const response = await fetch(`${apiURL}/chat/send?m=${input}&t=${token}`, {
         method: 'GET'
       });
 

@@ -52,16 +52,35 @@ def search():
 @app.route("/chat/init", methods=["GET"])
 def chat_init():
    label = request.args.get("label", 0)
-   print(label)
-   
    if label == 0: abort(422)
    
-   default_resp = {
-       "assistant_message": "Hello wold! I'm an assistant.",
-       "chat_token": "header.body.signiature"
+   token = chatMan.create_chat()
+   
+#    connect this to the DB
+   label_info = {
+       "name": "80 Plus",
+       "description": "The original premise of the 80 PLUS program was to enlist utilities and computer manufacturers to participate in an innovative upstream buy-down program to integrate more energy-efficient power supplies into desktop computers. The program has now evolved into the Ecos Plug Load Solutions program, which promotes and incents a broad array of highly energy-efficient commercial and retail technologies."
    }
    
-   return default_resp
+#    set up the chat   
+   [sysMessage,userMessage] = gptMan.init_chat(label_info)   
+   chatMan.add_record(token, sysMessage[1], sysMessage[0])   
+   chatMan.add_record(token, userMessage[1], userMessage[0])
+   
+#    get the message
+   chat = chatMan.get_chat(token)
+   message = gptMan.get_resp(chat)
+   
+#    save the message
+   chatMan.add_record(token, message, "assistant")
+   
+#    respond!
+   resp = {
+       "assistant_message": message,
+       "chat_token": token
+   }
+   
+   return resp
 
 
 @app.route("/chat/send", methods=["GET"])
@@ -72,10 +91,20 @@ def chat_send():
     user_message = request.args.get("m", 0)
     if user_message == 0: abort(422)
     
-    default_resp = {
-        "assistant_message": "This is a legitamate answer to your question."
+    # save the message
+    chatMan.add_record(token, user_message, "user")
+    
+    #    get the message
+    chat = chatMan.get_chat(token)
+    message = gptMan.get_resp(chat)
+   
+    # save the message
+    chatMan.add_record(token, message, "assistant")
+    
+    resp = {
+        "assistant_message": message
     }
-    return default_resp
+    return resp
 
 
 @app.route("/chat/terminate", methods=["PUT"])
@@ -88,7 +117,7 @@ def chat_terminate():
 
 if __name__ == "__main__":
     dbMan = dbm.DBManager(denv.get_key(denv_file, "DB_FILE"))
-    chatMan = cm.ChatManager(timeout_in_min=.1)
+    chatMan = cm.ChatManager(timeout_in_min=10)
     gptMan = gptm.GPTManager(denv.get_key(denv_secret, "OPEN_AI_API_KEY"))
     
     app.run(debug=True)
