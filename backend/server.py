@@ -55,15 +55,17 @@ def chat_init():
    if label == 0: abort(422)
    
    token = chatMan.create_chat()
+   
+#    connect this to the DB
    label_info = {
-       "name": "APT",
-       "description": "More info here later."
+       "name": "80 Plus",
+       "description": "The original premise of the 80 PLUS program was to enlist utilities and computer manufacturers to participate in an innovative upstream buy-down program to integrate more energy-efficient power supplies into desktop computers. The program has now evolved into the Ecos Plug Load Solutions program, which promotes and incents a broad array of highly energy-efficient commercial and retail technologies."
    }
    
-#    set up the chat
-   [sysMessage,userMessage] = gptMan.init_chat(label_info)
-   chatMan.add_record(token, sysMessage, "system")
-   chatMan.add_record(token, userMessage, "assistant")
+#    set up the chat   
+   [sysMessage,userMessage] = gptMan.init_chat(label_info)   
+   chatMan.add_record(token, sysMessage[1], sysMessage[0])   
+   chatMan.add_record(token, userMessage[1], userMessage[0])
    
 #    get the message
    chat = chatMan.get_chat(token)
@@ -115,7 +117,7 @@ def chat_terminate():
 
 if __name__ == "__main__":
     dbMan = dbm.DBManager(denv.get_key(denv_file, "DB_FILE"))
-    chatMan = cm.ChatManager(timeout_in_min=.1)
+    chatMan = cm.ChatManager(timeout_in_min=10)
     gptMan = gptm.GPTManager(denv.get_key(denv_secret, "OPEN_AI_API_KEY"))
     
     app.run(debug=True)
