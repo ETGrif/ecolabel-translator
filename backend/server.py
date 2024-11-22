@@ -4,6 +4,7 @@ import ChatManager as cm
 import GPTManager as gptm
 from flask_cors import CORS
 import dotenv as denv
+import signal
 
 denv_file = "backend/config.env"
 denv_secret = "backend/secret.env"
@@ -11,7 +12,14 @@ denv_secret = "backend/secret.env"
 # managers
 dbMan, chatMan, gptMan = 0,0,0
 
+def graceful_shutdown(signal, frame):
+    print("shutting down...")
+    dbMan.close_database_connection()
+    exit(0)
 
+
+signal.signal(signal.SIGTERM, graceful_shutdown)
+signal.signal(signal.SIGINT, graceful_shutdown)
 app = Flask(__name__)
 CORS(app)
 
@@ -25,7 +33,17 @@ def not_implemented(error):
 def search():
     q = request.args.get("q", 0)
     if q == 0: abort(422) #verify that the arg was included
-    # results = dbMan.search_for_label(q)
+    results = dbMan.search_ecolabels_by_name(q)
+    
+    resp = {"eco_label_data":[]}
+    
+    for r in results:
+        if len(resp["eco_label_data"]) < 3:
+            resp["eco_label_data"].append({
+                "eco_label": r["name"],
+                "image_url": r["image_url"],
+                "description": r["short_description"]
+            })
     
     default_resp = {
         "eco_label_data": [
@@ -46,7 +64,9 @@ def search():
             }
         ]
     }  
-    return default_resp
+    
+    
+    return resp
 
 
 @app.route("/chat/init", methods=["GET"])
@@ -57,9 +77,11 @@ def chat_init():
    token = chatMan.create_chat()
    
 #    connect this to the DB
+   response = dbMan.get_ecolabel_by_name(label)
+   
    label_info = {
-       "name": "80 Plus",
-       "description": "The original premise of the 80 PLUS program was to enlist utilities and computer manufacturers to participate in an innovative upstream buy-down program to integrate more energy-efficient power supplies into desktop computers. The program has now evolved into the Ecos Plug Load Solutions program, which promotes and incents a broad array of highly energy-efficient commercial and retail technologies."
+       "name": response["name"],
+       "description": response["description"]
    }
    
 #    set up the chat   
@@ -116,7 +138,8 @@ def chat_terminate():
 
 
 if __name__ == "__main__":
-    dbMan = dbm.DBManager(denv.get_key(denv_file, "DB_FILE"))
+    dbMan = dbm.DBManager()
+    dbMan.init_database()
     chatMan = cm.ChatManager(timeout_in_min=10)
     gptMan = gptm.GPTManager(denv.get_key(denv_secret, "OPEN_AI_API_KEY"))
     

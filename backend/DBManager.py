@@ -1,35 +1,100 @@
+from pymongo import MongoClient
+
 class DBManager:
-    """
-    Handles all interactions with the server's database
-    
-    Attributes:
-        db_file (string): A string filename to the MongoDB
-    """
-    def __init__(self, db_file):
-        self.db_file = db_file
-    
-    def search_for_label(self, searchTerm):
+
+    def init_database(self):
         """
-        Searches the database for potential matches based on the user provided searchTerm
-        
+        Establishes and verifies connection to the database
+
+        MUST be called before any other DB functions
+        """
+        try:
+            self.database_client = MongoClient("mongodb://db.benjaminapplegate.com:25567")
+            self.db = self.database_client.ecolabelDb
+            self.testCollection = self.db.testing
+            self.ecolabelCollection = self.db.ecolabels
+
+            print(f"Found Collections: {self.db.list_collection_names()}")
+
+            self.database_client.admin.command("ping")
+            print("Database connected properly")
+        except Exception as e:
+            print("Failed to connect to database")
+
+    def close_database_connection(self):
+        """
+        Closes database connection, should be called before app closes
+        """
+        self.database_client.close()
+
+    def insert_testing_document(self, data):
+        """
+        Inserts a document into the testing database
+
         Args:
-            searchTerm (string): The text entered by the user to search for a label
-            
+            data (dictionary): The data to store in the database
+
         Returns:
-            potential_matches (dict<string, string>): A dictionary of label names to the corresponding logo image filename
+            ID of the newly inserted document
         """
-        raise NotImplementedError()
-    
-    def get_info_on_label(self, label):
+        result = self.testCollection.insert_one(self, data)
+        print("Inserted document ID: ", result.inserted_id)
+        return result.inserted_id
+
+    def get_all_testing_documents(self):
+        return self.testCollection.find()
+
+    def insert_ecolabel(self, data):
         """
-        Queries the database for all information about the provided label
-        
+        Inserts a document into the ecolabel database
+
         Args:
-            label (string): the name of the label selected by the user
-            
+            data (dictionary): The data to store in the database
+
         Returns:
-            label_info (dict<string, string>): a dictionary representation of info pulled from the db
-                Ex: { "epa_description" : "<data from epa website>" }
+            ID of the newly inserted document
         """
-        raise NotImplementedError()
-    
+        result = self.ecolabelCollection.insert_one(data)
+        print("Inserted document ID: ", result.inserted_id)
+        return result.inserted_id
+
+    def get_all_ecolabels(self):
+        """
+        Fetches all ecolabels stored in the database
+
+        Returns:
+            A pymongo collection of documents (iterable)
+        """
+        return self.ecolabelCollection.find()
+
+    def get_ecolabel_by_name(self, name):
+        """
+        Searches ecolabel database for document with a name field provided
+
+        Args:
+            name (string) - The name of the ecolabel stored in the database to fetch
+
+        Returns:
+            A pymongo document
+        """
+        result = self.ecolabelCollection.find_one({"name": name})
+        return result
+
+    def search_ecolabels_by_name(self, pattern):
+        """
+            Searches ecolabel database for all documents where the name matches the provided pattern
+
+            Args:
+                pattern (string) - A pattern to search through the names with
+                NOTE: While pattern can just be a string to search for, it can be a regular expression if needed for more advanced searches
+            Returns:
+                A pymongo collection of documents (iterable)
+        """
+        matching_documents = self.ecolabelCollection.find({"name": {"$regex": pattern, "$options": "i"}})
+        return matching_documents
+
+if __name__ == "__main__":
+    manager = DBManager()
+    manager.init_database()
+    print(manager.get_all_testing_documents())
+    manager.close_database_connection()
