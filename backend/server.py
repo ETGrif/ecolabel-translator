@@ -4,6 +4,7 @@ import ChatManager as cm
 import GPTManager as gptm
 from flask_cors import CORS
 import dotenv as denv
+import signal
 
 denv_file = "backend/config.env"
 denv_secret = "backend/secret.env"
@@ -11,7 +12,14 @@ denv_secret = "backend/secret.env"
 # managers
 dbMan, chatMan, gptMan = 0,0,0
 
+def graceful_shutdown(signal, frame):
+    print("shutting down...")
+    dbMan.close_database_connection()
+    exit(0)
 
+
+signal.signal(signal.SIGTERM, graceful_shutdown)
+signal.signal(signal.SIGINT, graceful_shutdown)
 app = Flask(__name__)
 CORS(app)
 
@@ -116,7 +124,8 @@ def chat_terminate():
 
 
 if __name__ == "__main__":
-    dbMan = dbm.DBManager(denv.get_key(denv_file, "DB_FILE"))
+    dbMan = dbm.DBManager()
+    dbMan.init_database()
     chatMan = cm.ChatManager(timeout_in_min=10)
     gptMan = gptm.GPTManager(denv.get_key(denv_secret, "OPEN_AI_API_KEY"))
     
