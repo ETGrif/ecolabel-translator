@@ -3,108 +3,227 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
-  background-color: #a3b18a; /* Light neutral background for a clean look */
-}
-
-.container {
-  max-width: 600px;
-  margin: 50px auto;
+  background-color: #a3b18a; /* Light gray for a clean look */
+ }
+ .title {
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-top: 10px;
+  margin-bottom: 26px;
+  color: #2f4f4f;
+ }
+ 
+ 
+ .container {
+  max-width: 1200px;
+  width: 85%;
+  min-height: fit-content;
+  height: 250px;
+  margin: 0px auto;
   padding: 20px;
+  padding-bottom: 0px;
   border-radius: 10px;
-  background-color: #dad7cd; /* Crisp white for clarity */
+  background-color: #dad7cd; /* Slightly darker gray for clarity */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-h1, h2 {
+ }
+ 
+ 
+ h1, h2, h3 {
   color: #2f4f4f; /* Dark slate gray for strong, elegant headings */
-}
-
-input[type="text"], button {
+ }
+ 
+ 
+ input[type="text"], button {
   padding: 10px;
-  margin-top: 10px;
+  margin-top: 50px;
+  max-width: 500px;
   width: 80%;
+  height: auto;
   border: 1px solid #cfcfcf; /* Subtle border for input and buttons */
   border-radius: 5px;
-  font-size: 16px;
-}
-
-button {
+  margin-bottom: 40px;
+  font-size: 16px; /* Maintain a proportional width-to-height ratio */
+ }
+ input[type="text"] {
+  aspect-ratio: 20 / 1;
+ }
+ 
+ 
+ button {
   width: auto;
-  background-color: #a3b18a; /* Vibrant green for CTA buttons */
+  background-color: #3b6363; /* 3b6363 gray for CTA buttons */
   color: white;
   font-weight: bold;
   cursor: pointer;
   border: none;
   transition: background-color 0.3s ease-in-out;
-}
-
-button:hover {
-  background-color: #7d886a; /* Slightly darker green for hover */
-}
-
-.results, #messages {
+ }
+ 
+ 
+ button:hover {
+  background-color: #2f4f4f; /* 2f4f4f gray for hover */
+ }
+ 
+ 
+ .results, #messages {
   text-align: left;
   margin-top: 20px;
-}
-
-.back-link, .end-chat {
-  color: #a3b18a; /* Matches the button for visual consistency */
+ }
+ 
+ 
+ .back-link, .end-chat {
+  color: white; /* Matches the button for visual consistency */
   text-decoration: none;
   margin-top: 20px;
   display: inline-block;
   font-weight: bold;
-}
-
-.back-link:hover, .end-chat:hover {
-  color: #2f4f4f; /* Subtle change to tie into heading color */
-}
-
-.image-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.eco-label-image {
+  width: fit-content;
+ }
+ 
+ 
+ .eco-label-image {
   width: 150px;
+  max-width: 400px;
   height: auto;
   border: 1px solid #cfcfcf;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-}
-
-.image {
+ }
+ 
+ 
+ .image {
   display: block;
   text-align: center;
-}
-
-.image img {
+ }
+ 
+ 
+ .image img {
   padding: 10px;
-}
-
-.ecolabels {
+ }
+ 
+ 
+ .ecolabels {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 15px;
-}
-
-.ecolabels div {
+ }
+ 
+ 
+ .ecolabels div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   padding: 10px;
-  border-radius: 8px;
-  background-color: #a3b18a; /* Subtle gray for neutrality */
+  border-radius: 8px; /* Light gray for neutrality */
   transition: background-color 0.3s ease-in-out, transform 0.2s ease;
-}
-
-.ecolabels div:hover {
+  width: 30%;
+  color: #2f4f4f;
+ }
+ 
+ 
+ .ecolabels div:hover {
   cursor: pointer;
-  background-color: #588157; /* Slightly darker gray for hover state */
+  background-color: #588157; /* Medium gray for hover state */
   transform: translateY(-5px); /* Adds a lifting effect */
-}
-
-.description {
+  color: #ddd;
+ }
+ 
+ 
+ .ecolabels p:first-of-type {
+  font-size: 18px;
+  font-weight: bold;
+ }
+ 
+ 
+ .description {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
+ }
+ 
+ 
+ .popular {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+ }
+ 
+ 
+ .popular-eco-labels {
+  margin: 20px 0;
+ }
+ 
+ 
+ .eco-labels-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Two columns */
+  gap: 20px; /* Space between the items */
+  width: 80%;
+ }
+ 
+ 
+ .eco-label-card {
+  background-color: #dad7cd;
+  border: 1px solid #ddd; /* Optional border */
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+ }
+ 
+ 
+ .eco-label-card:hover {
+  transform: scale(1.05); /* Slight zoom effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #c6c3ba;
+ }
+ 
+ 
+ .eco-label-image {
+  max-width: 100px; /* Adjust image size */
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 4px;
+ }
+ 
+ 
+ .eco-label-card h3 {
+  margin: 10px 0 5px;
+  font-size: 1.2em;
+  color: #333;
+ }
+ 
+ 
+ .eco-label-card p {
+  font-size: 0.9em;
+  color: #666;
+ }
+ 
+ 
+ .chat-interface {
+  display: flex;
+  flex-direction: column;
+ }
+ 
+ 
+ .chat-interface input[type="text"] {
+  padding: 10px;
+  margin-top: 50px;
+  max-width: 900px;
+  width: 80%;
+  height: auto;
+  border: 1px solid #cfcfcf; /* Subtle border for input and buttons */
+  border-radius: 5px;
+  margin-bottom: 40px;
+  font-size: 16px;
+  aspect-ratio: 40 / 1;
+ }
+ 
