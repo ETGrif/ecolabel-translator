@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
+import leafIcon from './leaf-icon.png';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 function App() {
   const [label, setLabel] = useState('');
@@ -111,15 +115,22 @@ function App() {
 
   return (
     <div className="App">
-      <div className='title'>
-        EcoLabel Translator
-      </div>
+        <div className="navbar">
+          <div className="logo">
+            <img src={leafIcon} alt="Logo"/> 
+            <a>EcoLabel Translator</a>
+          </div>
+          <a href="#">Home</a>
+          <a href="#">About</a>
+          <a href="#">Content</a>
+          <a href="#">Others</a>
+        </div>
       <div className="container">
         {/* Render the search header and form only on the search page */}
         {!isChatActive && !results && (
           <>
             <h1>Search for an EcoLabel</h1>
-            <form onSubmit={handleLabelSubmit}>
+            <form onSubmit={handleLabelSubmit} className="search-container">
               <input 
                 type="text"
                 placeholder='Enter eco-label name'
@@ -127,7 +138,9 @@ function App() {
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}         
               />
-              <button type="submit">Search</button>
+              <button type="submit">
+                <FontAwesomeIcon icon={faSearch} />
+              </button>
             </form>
           </>
         )}
@@ -153,9 +166,9 @@ function App() {
             {isChatActive && (
               <div className='chat-interface'>
                 <h2>Eco-Label Chat Assistant</h2>
-                <div id="messages">
+                <div id="message">
                   {messages.map((message, index) => (
-                    <p key={index}><strong>{message.sender}:</strong> {message.text}</p>
+                    <p key={index} ><strong>{message.sender}:</strong> {message.text}</p>
                   ))}
                 </div>
   

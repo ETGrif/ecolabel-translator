@@ -1,20 +1,64 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: Inter, sans-serif;
+  font-weight: 300;
   text-align: center;
   margin: 0;
   padding: 0;
-  background-color: #a3b18a; /* Light gray for a clean look */
- }
- .title {
-  text-align: left;
-  font-size: 24px;
+  height: 100vh; /* Ensures the body takes up the full viewport height */
+  background-color: #a3b18a; /* Light gray fallback color */
+  background-image: url("background.png");
+  background-size: cover; /* Makes the image cover the entire background */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-position: center; /* Centers the image */
+  background-attachment: fixed; /* Keeps the background fixed when scrolling */
+  color: #6b8455;;
+}
+
+/* Style for the navigation bar */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9e3; /* Light background */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #e8e8b4; /* Light green */
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 1200px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+  text-decoration: none;
   font-weight: bold;
-  padding-left: 10px;
-  padding-top: 10px;
-  margin-bottom: 26px;
-  color: #2f4f4f;
- }
- 
+  color: #6b8455; /* Green shade */
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #4b6330; /* Darker green on hover */
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+  color: #4b6330;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 20px;
+  margin-right: 8px;
+}
+
  
  .container {
   max-width: 1200px;
@@ -25,13 +69,13 @@ body {
   padding: 20px;
   padding-bottom: 0px;
   border-radius: 10px;
-  background-color: #dad7cd; /* Slightly darker gray for clarity */
+  background-color: #e8e8b4; /* Slightly darker gray for clarity */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
  }
  
  
- h1, h2, h3 {
-  color: #2f4f4f; /* Dark slate gray for strong, elegant headings */
+ h1, h2, h3, p {
+  color: #6b8455; /* Dark slate gray for strong, elegant headings */
  }
  
  
@@ -53,7 +97,7 @@ body {
  
  button {
   width: auto;
-  background-color: #3b6363; /* 3b6363 gray for CTA buttons */
+  background-color: #6b8455; /* 3b6363 gray for CTA buttons */
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -169,23 +213,21 @@ body {
  
  
  .eco-label-card {
-  background-color: #dad7cd;
-  border: 1px solid #ddd; /* Optional border */
-  border-radius: 8px;
-  padding: 16px;
+  color: #6b8455;
+  background-color: #e1e4a7; /* Soft Ivory */
+  border-radius: 10px;
+  padding: 15px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.eco-label-card:hover {
+  background-color: #a8ad64; /* Slightly darker Ivory */
+  transform: scale(1.05);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
   cursor: pointer;
- }
- 
- 
- .eco-label-card:hover {
-  transform: scale(1.05); /* Slight zoom effect */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #c6c3ba;
- }
- 
+}
  
  .eco-label-image {
   max-width: 100px; /* Adjust image size */
@@ -198,13 +240,14 @@ body {
  .eco-label-card h3 {
   margin: 10px 0 5px;
   font-size: 1.2em;
-  color: #333;
+  color: #6b8455;
+  
  }
  
  
  .eco-label-card p {
   font-size: 0.9em;
-  color: #666;
+  color: #6b8455;;
  }
  
  
@@ -226,4 +269,3 @@ body {
   font-size: 16px;
   aspect-ratio: 40 / 1;
  }
- 
