@@ -113,6 +113,12 @@ def chat_send():
     user_message = request.args.get("m", 0)
     if user_message == 0: abort(422)
     
+    try:
+        chatMan.validate_token(token)
+    except cm.InvalidTokenException:
+        abort(401) #Unauthorized Response
+        
+    
     # save the message
     chatMan.add_record(token, user_message, "user")
     
