@@ -13,6 +13,7 @@ function App() {
   const [isChatActive, setIsChatActive] = useState(false);
   const [token, setToken] = useState(1);
   const apiURL = 'http://127.0.0.1:5000';
+
   const popularEcoLabels = [
     {
       "eco_label": "USDA Organic",
@@ -30,7 +31,6 @@ function App() {
         "description": 'Forest products / Paper'
     }
   ]
-
 
   const handleLabelSubmit = async (event) => {
     event.preventDefault();
@@ -55,12 +55,13 @@ function App() {
       console.error('Error submitting label:', error);
     }
   };
+  
 
   const handleMessageSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${apiURL}/chat/send?t=${input}&m=${token}`, {
+      const response = await fetch(`${apiURL}/chat/send?m=${input}&t=${token}`, {
         method: 'GET'
       });
 
