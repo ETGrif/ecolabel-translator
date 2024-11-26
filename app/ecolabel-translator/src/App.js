@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
+import leafIcon from './leaf-icon.png';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 function App() {
   const [label, setLabel] = useState('');
@@ -9,6 +13,24 @@ function App() {
   const [isChatActive, setIsChatActive] = useState(false);
   const [token, setToken] = useState(1);
   const apiURL = 'http://127.0.0.1:5000';
+
+  const popularEcoLabels = [
+    {
+      "eco_label": "USDA Organic",
+      "image_url": "https://www.ecolabelindex.com/files/ecolabel-logos-sized/usda-organic.png",
+      "description": 'Commodities, Food'
+    },
+    {
+        "eco_label": "Green Seal",
+        "image_url": "https://www.ecolabelindex.com/files/ecolabel-logos-sized/green-seal.png",
+        "description": 'Corporate purchasers (excluding retail), Government purchasers'
+    },
+    {
+        "eco_label": "Energy Star USA",
+        "image_url": "https://www.ecolabelindex.com/files/ecolabel-logos-sized/energy-star-usa.png",
+        "description": 'Forest products / Paper'
+    }
+  ]
 
   const handleLabelSubmit = async (event) => {
     event.preventDefault();
@@ -34,14 +56,6 @@ function App() {
     }
   };
   
-
-  const handleGetDetailedExplanation = () => {
-    console.log(`Requesting detailed explanation for ${label}`);
-    setResults((prevResults) => ({
-      ...prevResults,
-      detailedExplanation: 'Here is a detailed explanation of the eco-label...'
-    }));
-  };
 
   const handleMessageSubmit = async (event) => {
     event.preventDefault();
@@ -102,31 +116,45 @@ function App() {
 
   return (
     <div className="App">
+        <div className="navbar">
+          <div className="logo">
+            <img src={leafIcon} alt="Logo"/> 
+            <a>EcoLabel Translator</a>
+          </div>
+          <a href="#">Home</a>
+          <a href="#">About</a>
+          <a href="#">Content</a>
+          <a href="#">Others</a>
+        </div>
       <div className="container">
-        <h1>Eco-Label Translator</h1>
-        {/* Search form for Eco-Label */}
-        {!isChatActive && (
-          <form onSubmit={handleLabelSubmit}>
-            <input 
-              type="text"
-              placeholder='Enter eco-label name'
-              required
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}            
-            />
-            <button type="submit">Search</button>
-          </form>
+        {/* Render the search header and form only on the search page */}
+        {!isChatActive && !results && (
+          <>
+            <h1>Search for an EcoLabel</h1>
+            <form onSubmit={handleLabelSubmit} className="search-container">
+              <input 
+                type="text"
+                placeholder='Enter eco-label name'
+                required
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}         
+              />
+              <button type="submit">
+                <FontAwesomeIcon icon={faSearch} />
+              </button>
+            </form>
+          </>
         )}
-
+  
         {/* Display results if available */}
         {results ? (
           <div className="results">
             <h2>Results for "{label}"</h2>
             <div className='ecolabels'> 
-              {results.ecolabel1 && results.ecolabel1.map((details, index) =>(
-                <div onClick={() => handleChatActive(details.eco_label)}>
-                  <h3>{details.eco_label}</h3>
-                  <img key={index} src={details.image_url} alt="EcoLabel Image" className="eco-label-image"/>
+              {results.ecolabel1 && results.ecolabel1.map((details, index) => (
+                <div key={index} onClick={() => handleChatActive(details.eco_label)}>
+                  <p>{details.eco_label}</p>
+                  <img src={details.image_url} alt="EcoLabel Image" className="eco-label-image"/>
                   <p>{details.description}</p>
                 </div>
               ))}
@@ -137,14 +165,14 @@ function App() {
           <div>
             {/* Chat Interface */}
             {isChatActive && (
-              <div>
+              <div className='chat-interface'>
                 <h2>Eco-Label Chat Assistant</h2>
-                <div id="messages">
+                <div id="message">
                   {messages.map((message, index) => (
-                    <p key={index}><strong>{message.sender}:</strong> {message.text}</p>
+                    <p key={index} ><strong>{message.sender}:</strong> {message.text}</p>
                   ))}
                 </div>
-
+  
                 <form onSubmit={handleMessageSubmit}>
                   <input
                     type="text"
@@ -155,15 +183,31 @@ function App() {
                   />
                   <button type="submit">Send</button>
                 </form>
-
-                <button onClick={handleEndChat}>End Chat</button>
+  
+                <button onClick={handleEndChat} className='end-chat'>End Chat</button>
               </div>
             )}
           </div>
         )}
       </div>
+      {/* Display popular ecolabels only on the search page */}
+      {!isChatActive && !results && (
+        <div className='popular'>
+          <h3>Most Popular EcoLabels</h3>
+          <div className='eco-labels-grid'>
+            {popularEcoLabels.map((details, index) => (
+              <div key={index} className='eco-label-card' onClick={() => handleChatActive(details.eco_label)}>
+                <h3>{details.eco_label}</h3>
+                <img src={details.image_url} alt="EcoLabel Image" className="eco-label-image"/>
+                <p>{details.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+}  
 
 export default App;
+

@@ -64,14 +64,15 @@ def search():
             }
         ]
     }  
-    
-    
+
     return resp
+
 
 
 @app.route("/chat/init", methods=["GET"])
 def chat_init():
    label = request.args.get("label", 0)
+
    if label == 0: abort(422)
    
    token = chatMan.create_chat()
