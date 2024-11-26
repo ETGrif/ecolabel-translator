@@ -1,3 +1,8 @@
 Flask
 python-dotenv
 pyjwt
+openai
+pymongo
+flask_cors
+openai
+
